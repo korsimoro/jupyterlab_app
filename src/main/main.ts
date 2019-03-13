@@ -5,6 +5,7 @@ import {
 import * as Bottle from 'bottlejs';
 import log from 'electron-log';
 import * as yargs from 'yargs';
+import * as fs from 'fs';
 
 const isDevMode = process.mainModule.filename.indexOf( 'app.asar' ) === -1;
 
@@ -116,6 +117,15 @@ const services = ['./app', './sessions', './server', './menu', './shortcuts', '.
 app.on('ready', () => {
     handOverArguments()
     .then( () => {
+        let documentsDir = app.getPath('documents');
+        let workspaceDir = documentsDir +"/kisia";
+        if (!fs.existsSync(workspaceDir)) {
+            fs.mkdirSync(workspaceDir, parseInt('0744',8));
+        }
+        process.chdir(workspaceDir)
+
+        process.env.PYTHONPATH=process.resourcesPath + "/settings/venv/lib/python3.7/";
+
         let serviceManager = new Bottle();
         let autostarts: string[] = [];
         services.forEach((s: IService) => {
@@ -154,7 +164,7 @@ function handOverArguments(): Promise<void> {
             }
         });
         if (second) {
-            reject();
+            reject("Can only run one instance at a time");
         }
         resolve();
     });

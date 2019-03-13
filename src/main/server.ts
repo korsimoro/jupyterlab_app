@@ -56,6 +56,8 @@ class JupyterServer {
             let baseRegExp = /http:\/\/localhost:\d+\//g;
             let home = app.getPath('home');
 
+            log.info("PYTHONPATH",process.env.PYTHONPATH)
+            log.info("this._info.environment.path",this._info.environment.path)
             this._nbServer = execFile(this._info.environment.path, ['-m', 'jupyter', 'notebook', '--no-browser'], { cwd: home });
 
             this._nbServer.on('exit', () => {
