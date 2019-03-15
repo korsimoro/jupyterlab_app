@@ -1,0 +1,11 @@
+{
+ "argv": [
+  "python",
+  "-m",
+  "kisia_kernel",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "Kisia",
+ "language": "custom"
+}
